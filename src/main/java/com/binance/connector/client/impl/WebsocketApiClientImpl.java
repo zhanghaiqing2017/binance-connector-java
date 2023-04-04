@@ -85,9 +85,6 @@ public class WebsocketApiClientImpl implements WebsocketApiClient {
         connect(noopCallback, onMessageCallback, noopCallback, noopCallback);
     }
 
-  public void connect1(WebSocketCallback onMessageCallback) {
-    connect1(noopCallback, onMessageCallback, noopCallback, noopCallback);
-  }
 
   public void connect(WebSocketCallback onOpenCallback, WebSocketCallback onMessageCallback, WebSocketCallback onClosingCallback, WebSocketCallback onFailureCallback) {
         Request request = RequestBuilder.buildWebsocketRequest(baseUrl);
@@ -100,12 +97,6 @@ public class WebsocketApiClientImpl implements WebsocketApiClient {
       this.requestHandler = new WebSocketApiRequestHandler(this.connection, this.apiKey, this.signatureGenerator);
 
     }
-  public void connect1(WebSocketCallback onOpenCallback, WebSocketCallback onMessageCallback, WebSocketCallback onClosingCallback, WebSocketCallback onFailureCallback) {
-    Request request = RequestBuilder.buildWebsocketRequest(baseUrl);
-
-    this.connection = new WebSocketConnection(onOpenCallback, onMessageCallback, onClosingCallback, onFailureCallback, request, client);
-    this.connection.connect();
-  }
 
     @Override
     public void close() {
@@ -119,6 +110,9 @@ public class WebsocketApiClientImpl implements WebsocketApiClient {
         checkCategoryInstance(this.wsApiGeneral, WebSocketApiGeneral.class);
         return this.wsApiGeneral;
     }
+    public WebSocketApiGeneral general(String apiKey,SignatureGenerator signatureGenerator) {
+        return new WebSocketApiGeneral(new WebSocketApiRequestHandler(this.connection, apiKey, signatureGenerator));
+    }
 
     @Override
     public WebSocketApiMarket market() {
@@ -126,12 +120,17 @@ public class WebsocketApiClientImpl implements WebsocketApiClient {
         checkCategoryInstance(this.wsApiMarket, WebSocketApiMarket.class);
         return this.wsApiMarket;
     }
-
+    public WebSocketApiMarket market(String apiKey,SignatureGenerator signatureGenerator) {
+        return new WebSocketApiMarket(new WebSocketApiRequestHandler(this.connection, apiKey, signatureGenerator));
+    }
     @Override
     public WebSocketApiTrade trade() {
         checkRequestHandler();
         checkCategoryInstance(this.wsApiTrade, WebSocketApiTrade.class);
         return this.wsApiTrade;
+    }
+    public WebSocketApiTrade trade(String apiKey,SignatureGenerator signatureGenerator) {
+        return new WebSocketApiTrade(new WebSocketApiRequestHandler(this.connection, apiKey, signatureGenerator));
     }
 
     @Override
