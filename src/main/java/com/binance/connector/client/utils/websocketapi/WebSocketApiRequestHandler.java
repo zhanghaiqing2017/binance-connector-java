@@ -24,25 +24,25 @@ public class WebSocketApiRequestHandler {
         this.signatureGenerator = signatureGenerator;
     }
 
-    public void publicRequest(String method) {
-        this.request(RequestType.PUBLIC, method, null);
+    public Object publicRequest(String method) {
+        return this.request(RequestType.PUBLIC, method, null);
     }
 
-    public void publicRequest(String method, JSONObject parameters) {
-        this.request(RequestType.PUBLIC, method, parameters);
+    public Object publicRequest(String method, JSONObject parameters) {
+        return this.request(RequestType.PUBLIC, method, parameters);
     }
 
-    public void apiRequest(String method, JSONObject parameters) {
-        this.request(RequestType.WITH_API_KEY, method, parameters);
+    public Object apiRequest(String method, JSONObject parameters) {
+        return this.request(RequestType.WITH_API_KEY, method, parameters);
 
     }
 
-    public void signedRequest(String method, JSONObject parameters) {
-        this.request(RequestType.SIGNED, method, parameters);
+    public Object signedRequest(String method, JSONObject parameters) {
+        return this.request(RequestType.SIGNED, method, parameters);
     }
 
-    public void request(RequestType requestType, String method, JSONObject parameters) {
-        Object requestId = ParameterChecker.processId(JSONParser.pullValue(parameters, "requestId"), "requestId"); 
+    public Object request(RequestType requestType, String method, JSONObject parameters) {
+        Object requestId = ParameterChecker.processId(JSONParser.pullValue(parameters, "requestId"), "requestId");
         ParameterChecker.checkParameterType(method, String.class, "method");
 
         switch (requestType) {
@@ -71,5 +71,6 @@ public class WebSocketApiRequestHandler {
             default:
                 throw new BinanceConnectorException("[WebSocketApiRequestHandler] Invalid request type: " + requestType);
         }
+        return requestId;
     }
 }

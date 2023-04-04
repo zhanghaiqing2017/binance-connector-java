@@ -38,10 +38,10 @@ public class WebSocketApiMarket {
      * @see <a href="https://binance-docs.github.io/apidocs/websocket_api/en/#order-book">
      *     https://binance-docs.github.io/apidocs/websocket_api/en/#order-book</a>
      */
-    public void depth(String symbol, JSONObject parameters) {
+    public Object depth(String symbol, JSONObject parameters) {
         ParameterChecker.checkParameterType(symbol, String.class, "symbol");
         parameters = JSONParser.addKeyValue(parameters, "symbol", symbol);
-        this.handler.publicRequest("depth", parameters);
+        return this.handler.publicRequest("depth", parameters);
     }
 
     /**
@@ -56,10 +56,10 @@ public class WebSocketApiMarket {
      * @see <a href="https://binance-docs.github.io/apidocs/websocket_api/en/#recent-trades">
      *     https://binance-docs.github.io/apidocs/websocket_api/en/#recent-trades</a>
      */
-    public void recentTrades(String symbol, JSONObject parameters) {
+    public Object recentTrades(String symbol, JSONObject parameters) {
         ParameterChecker.checkParameterType(symbol, String.class, "symbol");
         parameters = JSONParser.addKeyValue(parameters, "symbol", symbol);
-        this.handler.publicRequest("trades.recent", parameters);
+        return this.handler.publicRequest("trades.recent", parameters);
     }
 
 
@@ -78,10 +78,10 @@ public class WebSocketApiMarket {
      * @see <a href="https://binance-docs.github.io/apidocs/websocket_api/en/#historical-trades-market_data">
      *     https://binance-docs.github.io/apidocs/websocket_api/en/#historical-trades-market_data</a>
      */
-    public void historicalTrades(String symbol, JSONObject parameters) {
+    public Object historicalTrades(String symbol, JSONObject parameters) {
         ParameterChecker.checkParameterType(symbol, String.class, "symbol");
         parameters = JSONParser.addKeyValue(parameters, "symbol", symbol);
-        this.handler.apiRequest("trades.historical", parameters);
+        return  this.handler.apiRequest("trades.historical", parameters);
     }
 
     /**
@@ -102,10 +102,10 @@ public class WebSocketApiMarket {
      * @see <a href="https://binance-docs.github.io/apidocs/websocket_api/en/#aggregate-trades">
      *     https://binance-docs.github.io/apidocs/websocket_api/en/#aggregate-trades</a>
      */
-    public void aggTrades(String symbol, JSONObject parameters) {
+    public Object aggTrades(String symbol, JSONObject parameters) {
         ParameterChecker.checkParameterType(symbol, String.class, "symbol");
         parameters = JSONParser.addKeyValue(parameters, "symbol", symbol);
-        this.handler.publicRequest("trades.aggregate", parameters);
+        return this.handler.publicRequest("trades.aggregate", parameters);
     }
 
 
@@ -126,14 +126,14 @@ public class WebSocketApiMarket {
      * @see <a href="https://binance-docs.github.io/apidocs/websocket_api/en/#klines">
      *     https://binance-docs.github.io/apidocs/websocket_api/en/#klines</a>
      */
-    public void klines(String symbol, String interval, JSONObject parameters) {
+    public Object klines(String symbol, String interval, JSONObject parameters) {
         ParameterChecker.checkParameterType(symbol, String.class, "symbol");
         ParameterChecker.checkParameterType(interval, String.class, "interval");
 
         parameters = JSONParser.addKeyValue(parameters, "symbol", symbol);
         parameters = JSONParser.addKeyValue(parameters, "interval", interval);
 
-        this.handler.publicRequest("klines", parameters);
+        return this.handler.publicRequest("klines", parameters);
     }
 
     /**
@@ -153,14 +153,14 @@ public class WebSocketApiMarket {
      * @see <a href="https://binance-docs.github.io/apidocs/websocket_api/en/#ui-klines">
      *     https://binance-docs.github.io/apidocs/websocket_api/en/#ui-klines</a>
      */
-    public void uiKlines(String symbol, String interval, JSONObject parameters) {
+    public Object uiKlines(String symbol, String interval, JSONObject parameters) {
         ParameterChecker.checkParameterType(symbol, String.class, "symbol");
         ParameterChecker.checkParameterType(interval, String.class, "interval");
 
         parameters = JSONParser.addKeyValue(parameters, "symbol", symbol);
         parameters = JSONParser.addKeyValue(parameters, "interval", interval);
 
-        this.handler.publicRequest("uiKlines", parameters);
+        return this.handler.publicRequest("uiKlines", parameters);
     }
 
     /**
@@ -174,10 +174,10 @@ public class WebSocketApiMarket {
      * @see <a href="https://binance-docs.github.io/apidocs/websocket_api/en/#current-average-price">
      *     https://binance-docs.github.io/apidocs/websocket_api/en/#current-average-price</a>
      */
-    public void avgPrice(String symbol, JSONObject parameters) {
+    public Object avgPrice(String symbol, JSONObject parameters) {
         ParameterChecker.checkParameterType(symbol, String.class, "symbol");
         parameters = JSONParser.addKeyValue(parameters, "symbol", symbol);
-        this.handler.publicRequest("avgPrice", parameters);
+        return this.handler.publicRequest("avgPrice", parameters);
     }
 
     /**
@@ -193,9 +193,9 @@ public class WebSocketApiMarket {
      * @see <a href="https://binance-docs.github.io/apidocs/websocket_api/en/#24hr-ticker-price-change-statistics">
      *     https://binance-docs.github.io/apidocs/websocket_api/en/#24hr-ticker-price-change-statistics</a>
      */
-    public void ticker24H(JSONObject parameters) {
+    public Object ticker24H(JSONObject parameters) {
         ParameterChecker.checkOnlyOneOfParameters(parameters, "symbol", "symbols");
-        this.handler.publicRequest("ticker.24hr", parameters);
+        return this.handler.publicRequest("ticker.24hr", parameters);
     }
 
     /**
@@ -219,10 +219,10 @@ public class WebSocketApiMarket {
      * @see <a href="https://binance-docs.github.io/apidocs/websocket_api/en/#rolling-window-price-change-statistics">
      *     https://binance-docs.github.io/apidocs/websocket_api/en/#rolling-window-price-change-statistics</a>
      */
-    public void ticker(JSONObject parameters) {
+    public Object ticker(JSONObject parameters) {
         ParameterChecker.checkOnlyOneOfParameters(parameters, "symbol", "symbols");
         ParameterChecker.checkOneOfParametersRequired(parameters, "symbol", "symbols");
-        this.handler.publicRequest("ticker", parameters);
+        return this.handler.publicRequest("ticker", parameters);
     }
 
     /**
@@ -237,9 +237,9 @@ public class WebSocketApiMarket {
      * @see <a href="https://binance-docs.github.io/apidocs/websocket_api/en/#symbol-price-ticker">
      *     https://binance-docs.github.io/apidocs/websocket_api/en/#symbol-price-ticker</a>
      */
-    public void tickerPrice(JSONObject parameters) {
+    public Object tickerPrice(JSONObject parameters) {
         ParameterChecker.checkOnlyOneOfParameters(parameters, "symbol", "symbols");
-        this.handler.publicRequest("ticker.price", parameters);
+        return this.handler.publicRequest("ticker.price", parameters);
     }
 
     /**
@@ -254,8 +254,8 @@ public class WebSocketApiMarket {
      * @see <a href="https://binance-docs.github.io/apidocs/websocket_api/en/#symbol-order-book-ticker">
      *     https://binance-docs.github.io/apidocs/websocket_api/en/#symbol-order-book-ticker</a>
      */
-    public void tickerBook(JSONObject parameters) {
+    public Object tickerBook(JSONObject parameters) {
         ParameterChecker.checkOnlyOneOfParameters(parameters, "symbol", "symbols");
-        this.handler.publicRequest("ticker.book", parameters);
+        return this.handler.publicRequest("ticker.book", parameters);
     }
 }

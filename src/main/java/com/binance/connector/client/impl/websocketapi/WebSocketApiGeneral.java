@@ -32,8 +32,8 @@ public class WebSocketApiGeneral {
      * @see <a href="https://binance-docs.github.io/apidocs/websocket_api/en/#test-connectivity">
      *     https://binance-docs.github.io/apidocs/websocket_api/en/#test-connectivity</a>
      */
-    public void ping(JSONObject parameters) {
-        this.handler.publicRequest("ping", parameters);
+    public Object ping(JSONObject parameters) {
+        return this.handler.publicRequest("ping", parameters);
     }
 
     /**
@@ -46,8 +46,8 @@ public class WebSocketApiGeneral {
      * @see <a href="https://binance-docs.github.io/apidocs/websocket_api/en/#check-server-time">
      *     https://binance-docs.github.io/apidocs/websocket_api/en/#check-server-time</a>
      */
-    public void serverTime(JSONObject parameters) {
-        this.handler.publicRequest("time", parameters);
+    public Object serverTime(JSONObject parameters) {
+        return this.handler.publicRequest("time", parameters);
     }
 
     /**
@@ -68,9 +68,9 @@ public class WebSocketApiGeneral {
      * @see <a href="https://binance-docs.github.io/apidocs/websocket_api/en/#exchange-information">
      *     https://binance-docs.github.io/apidocs/websocket_api/en/#exchange-information</a>
      */
-    public void exchangeInfo(JSONObject parameters) {
+    public Object exchangeInfo(JSONObject parameters) {
         ParameterChecker.checkOnlyOneOfParameters(parameters, "symbol", "symbols", "permissions");
-        this.handler.publicRequest("exchangeInfo", parameters);
+        return this.handler.publicRequest("exchangeInfo", parameters);
     }
 
 }

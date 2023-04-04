@@ -48,7 +48,7 @@ public class WebSocketApiTrade {
      * @see <a href="https://binance-docs.github.io/apidocs/websocket_api/en/#place-new-order-trade">
      *     https://binance-docs.github.io/apidocs/websocket_api/en/#place-new-order-trade</a>
      */
-    public void newOrder(String symbol, String side, String type, JSONObject parameters) {
+    public Object newOrder(String symbol, String side, String type, JSONObject parameters) {
 
         ParameterChecker.checkParameterType(symbol, String.class, "symbol");
         ParameterChecker.checkParameterType(side, String.class, "side");
@@ -58,7 +58,7 @@ public class WebSocketApiTrade {
         parameters = JSONParser.addKeyValue(parameters, "side", side);
         parameters = JSONParser.addKeyValue(parameters, "type", type);
         
-        this.handler.signedRequest("order.place", parameters);
+        return this.handler.signedRequest("order.place", parameters);
     }
 
     /**
@@ -90,7 +90,7 @@ public class WebSocketApiTrade {
      * @see <a href="https://binance-docs.github.io/apidocs/websocket_api/en/#test-new-order-trade">
      *     https://binance-docs.github.io/apidocs/websocket_api/en/#test-new-order-trade</a>
      */
-    public void testNewOrder(String symbol, String side, String type, JSONObject parameters) {
+    public Object testNewOrder(String symbol, String side, String type, JSONObject parameters) {
 
         ParameterChecker.checkParameterType(symbol, String.class, "symbol");
         ParameterChecker.checkParameterType(side, String.class, "side");
@@ -100,7 +100,7 @@ public class WebSocketApiTrade {
         parameters = JSONParser.addKeyValue(parameters, "side", side);
         parameters = JSONParser.addKeyValue(parameters, "type", type);
         
-        this.handler.signedRequest("order.test", parameters);
+        return this.handler.signedRequest("order.test", parameters);
     }
 
     /**
@@ -119,12 +119,12 @@ public class WebSocketApiTrade {
      * @see <a href="https://binance-docs.github.io/apidocs/websocket_api/en/#query-order-user_data">
      *     https://binance-docs.github.io/apidocs/websocket_api/en/#query-order-user_data</a>
      */
-    public void getOrder(String symbol, JSONObject parameters) {
+    public Object getOrder(String symbol, JSONObject parameters) {
         ParameterChecker.checkOneOfParametersRequired(parameters, "orderId", "origClientOrderId");
         ParameterChecker.checkParameterType(symbol, String.class, "symbol");
 
         parameters = JSONParser.addKeyValue(parameters, "symbol", symbol);
-        this.handler.signedRequest("order.status", parameters);
+        return this.handler.signedRequest("order.status", parameters);
     }
 
     /**
@@ -144,12 +144,12 @@ public class WebSocketApiTrade {
      * @see <a href="https://binance-docs.github.io/apidocs/websocket_api/en/#cancel-order-trade">
      *     https://binance-docs.github.io/apidocs/websocket_api/en/#cancel-order-trade</a>
      */
-    public void cancelOrder(String symbol, JSONObject parameters) {
+    public Object cancelOrder(String symbol, JSONObject parameters) {
         ParameterChecker.checkOneOfParametersRequired(parameters, "orderId", "origClientOrderId");
         ParameterChecker.checkParameterType(symbol, String.class, "symbol");
 
         parameters = JSONParser.addKeyValue(parameters, "symbol", symbol);
-        this.handler.signedRequest("order.cancel", parameters);
+        return this.handler.signedRequest("order.cancel", parameters);
     }
 
     /**
@@ -185,7 +185,7 @@ public class WebSocketApiTrade {
      * @see <a href="https://binance-docs.github.io/apidocs/websocket_api/en/#cancel-and-replace-order-trade">
      *     https://binance-docs.github.io/apidocs/websocket_api/en/#cancel-and-replace-order-trade</a>
      */
-    public void cancelReplaceOrder(String symbol, String cancelReplaceMode, String side, String type, JSONObject parameters) {
+    public Object cancelReplaceOrder(String symbol, String cancelReplaceMode, String side, String type, JSONObject parameters) {
 
         ParameterChecker.checkParameterType(symbol, String.class, "symbol");
         ParameterChecker.checkParameterType(cancelReplaceMode, String.class, "cancelReplaceMode");
@@ -198,7 +198,7 @@ public class WebSocketApiTrade {
         parameters = JSONParser.addKeyValue(parameters, "side", side);
         parameters = JSONParser.addKeyValue(parameters, "type", type);
 
-        this.handler.signedRequest("order.cancelReplace", parameters);
+        return this.handler.signedRequest("order.cancelReplace", parameters);
     }
 
      /**
@@ -213,8 +213,8 @@ public class WebSocketApiTrade {
      * @see <a href="https://binance-docs.github.io/apidocs/websocket_api/en/#current-open-orders-user_data">
      *     https://binance-docs.github.io/apidocs/websocket_api/en/#current-open-orders-user_data</a>
      */
-    public void getOpenOrders(JSONObject parameters) {
-        this.handler.signedRequest("openOrders.status", parameters);
+    public Object getOpenOrders(JSONObject parameters) {
+        return this.handler.signedRequest("openOrders.status", parameters);
     }
 
     /**
@@ -230,11 +230,11 @@ public class WebSocketApiTrade {
      * @see <a href="https://binance-docs.github.io/apidocs/websocket_api/en/#cancel-open-orders-trade">
      *     https://binance-docs.github.io/apidocs/websocket_api/en/#cancel-open-orders-trade</a>
      */
-    public void cancelAllOpenOrders(String symbol, JSONObject parameters) {
+    public Object cancelAllOpenOrders(String symbol, JSONObject parameters) {
         ParameterChecker.checkParameterType(symbol, String.class, "symbol");
 
         parameters = JSONParser.addKeyValue(parameters, "symbol", symbol);
-        this.handler.signedRequest("openOrders.cancelAll", parameters);
+        return this.handler.signedRequest("openOrders.cancelAll", parameters);
     }
 
     /**
@@ -267,7 +267,7 @@ public class WebSocketApiTrade {
      * @see <a href="https://binance-docs.github.io/apidocs/websocket_api/en/#place-new-oco-trade">
      *     https://binance-docs.github.io/apidocs/websocket_api/en/#place-new-oco-trade</a>
      */
-    public void newOcoOrder(String symbol, String side, double price, double quantity, JSONObject parameters) {
+    public Object newOcoOrder(String symbol, String side, double price, double quantity, JSONObject parameters) {
         ParameterChecker.checkOneOfParametersRequired(parameters, "stopPrice", "trailingDelta");
         ParameterChecker.checkParameterType(symbol, String.class, "symbol");
         ParameterChecker.checkParameterType(side, String.class, "side");
@@ -279,7 +279,7 @@ public class WebSocketApiTrade {
         parameters = JSONParser.addKeyValue(parameters, "price", price);
         parameters = JSONParser.addKeyValue(parameters, "quantity", quantity);
         
-        this.handler.signedRequest("orderList.place", parameters);
+        return this.handler.signedRequest("orderList.place", parameters);
     }
 
     /**
@@ -297,9 +297,9 @@ public class WebSocketApiTrade {
      * @see <a href="https://binance-docs.github.io/apidocs/websocket_api/en/#query-oco-user_data">
      *     https://binance-docs.github.io/apidocs/websocket_api/en/#query-oco-user_data</a>
      */
-    public void getOcoOrder(JSONObject parameters) {
+    public Object getOcoOrder(JSONObject parameters) {
         ParameterChecker.checkOneOfParametersRequired(parameters, "origClientOrderId", "orderListId");
-        this.handler.signedRequest("orderList.status", parameters);
+        return this.handler.signedRequest("orderList.status", parameters);
     }
 
     /**
@@ -320,12 +320,12 @@ public class WebSocketApiTrade {
      * @see <a href="https://binance-docs.github.io/apidocs/websocket_api/en/#cancel-oco-trade">
      *     https://binance-docs.github.io/apidocs/websocket_api/en/#cancel-oco-trade</a>
      */
-    public void cancelOcoOrder(String symbol, JSONObject parameters) {
+    public Object cancelOcoOrder(String symbol, JSONObject parameters) {
         ParameterChecker.checkOneOfParametersRequired(parameters, "listClientOrderId", "orderListId");
         ParameterChecker.checkParameterType(symbol, String.class, "symbol");
         
         parameters = JSONParser.addKeyValue(parameters, "symbol", symbol);
-        this.handler.signedRequest("orderList.cancel", parameters);
+        return this.handler.signedRequest("orderList.cancel", parameters);
     }
 
     /**
@@ -342,7 +342,7 @@ public class WebSocketApiTrade {
      * @see <a href="https://binance-docs.github.io/apidocs/websocket_api/en/#current-open-ocos-user_data">
      *     https://binance-docs.github.io/apidocs/websocket_api/en/#current-open-ocos-user_data</a>
      */
-    public void getOpenOcoOrders(JSONObject parameters) {
-        this.handler.signedRequest("openOrderLists.status", parameters);
+    public Object getOpenOcoOrders(JSONObject parameters) {
+        return this.handler.signedRequest("openOrderLists.status", parameters);
     }
 }
