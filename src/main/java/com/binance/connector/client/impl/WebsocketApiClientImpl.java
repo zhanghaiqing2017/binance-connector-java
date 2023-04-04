@@ -20,10 +20,11 @@ import okhttp3.Request;
 
 public class WebsocketApiClientImpl implements WebsocketApiClient {
     private static final OkHttpClient client = WebSocketApiHttpClientSingleton.getHttpClient();
-    private final SignatureGenerator signatureGenerator;
-    private final String apiKey;
+    private final SignatureGenerator signatureGenerators;
+    private final String apiKeys;
     private final String baseUrl;
-    private final WebSocketCallback noopCallback = msg -> { };
+    private final WebSocketCallback noopCallback = msg -> {
+    };
     private WebSocketConnection connection;
     private WebSocketApiRequestHandler requestHandler;
     private WebSocketApiGeneral wsApiGeneral;
@@ -32,15 +33,15 @@ public class WebsocketApiClientImpl implements WebsocketApiClient {
     private WebSocketApiAccount wsApiAccount;
     private WebSocketApiUserDataStream wsApiUserDataStream;
 
-  public SignatureGenerator getSignatureGenerator() {
-    return signatureGenerator;
-  }
+    public SignatureGenerator getSignatureGenerator() {
+        return signatureGenerators;
+    }
 
-  public String getApiKey() {
-    return apiKey;
-  }
+    public String getApiKey() {
+        return apiKeys;
+    }
 
-  public WebsocketApiClientImpl() {
+    public WebsocketApiClientImpl() {
         this("", null);
     }
 
@@ -53,8 +54,8 @@ public class WebsocketApiClientImpl implements WebsocketApiClient {
     }
 
     public WebsocketApiClientImpl(String apiKey, SignatureGenerator signatureGenerator, String baseUrl) {
-        this.apiKey = apiKey;
-        this.signatureGenerator = signatureGenerator;
+        this.apiKeys = apiKey;
+        this.signatureGenerators = signatureGenerator;
         this.baseUrl = baseUrl;
     }
 
@@ -86,15 +87,16 @@ public class WebsocketApiClientImpl implements WebsocketApiClient {
     }
 
 
-  public void connect(WebSocketCallback onOpenCallback, WebSocketCallback onMessageCallback, WebSocketCallback onClosingCallback, WebSocketCallback onFailureCallback) {
+    public void connect(WebSocketCallback onOpenCallback, WebSocketCallback onMessageCallback, WebSocketCallback onClosingCallback, WebSocketCallback onFailureCallback) {
         Request request = RequestBuilder.buildWebsocketRequest(baseUrl);
 
         this.connection = new WebSocketConnection(onOpenCallback, onMessageCallback, onClosingCallback, onFailureCallback, request, client);
-        this.requestHandler = new WebSocketApiRequestHandler(this.connection, this.apiKey, this.signatureGenerator);
+        this.requestHandler = new WebSocketApiRequestHandler(this.connection, this.apiKeys, this.signatureGenerators);
         this.connection.connect();
     }
-    public void setRequestHandler(){
-      this.requestHandler = new WebSocketApiRequestHandler(this.connection, this.apiKey, this.signatureGenerator);
+
+    public void setRequestHandler() {
+        this.requestHandler = new WebSocketApiRequestHandler(this.connection, this.apiKeys, this.signatureGenerators);
 
     }
 
@@ -110,7 +112,8 @@ public class WebsocketApiClientImpl implements WebsocketApiClient {
         checkCategoryInstance(this.wsApiGeneral, WebSocketApiGeneral.class);
         return this.wsApiGeneral;
     }
-    public WebSocketApiGeneral general(String apiKey,SignatureGenerator signatureGenerator) {
+
+    public WebSocketApiGeneral general(String apiKey, SignatureGenerator signatureGenerator) {
         return new WebSocketApiGeneral(new WebSocketApiRequestHandler(this.connection, apiKey, signatureGenerator));
     }
 
@@ -120,16 +123,19 @@ public class WebsocketApiClientImpl implements WebsocketApiClient {
         checkCategoryInstance(this.wsApiMarket, WebSocketApiMarket.class);
         return this.wsApiMarket;
     }
-    public WebSocketApiMarket market(String apiKey,SignatureGenerator signatureGenerator) {
+
+    public WebSocketApiMarket market(String apiKey, SignatureGenerator signatureGenerator) {
         return new WebSocketApiMarket(new WebSocketApiRequestHandler(this.connection, apiKey, signatureGenerator));
     }
+
     @Override
     public WebSocketApiTrade trade() {
         checkRequestHandler();
         checkCategoryInstance(this.wsApiTrade, WebSocketApiTrade.class);
         return this.wsApiTrade;
     }
-    public WebSocketApiTrade trade(String apiKey,SignatureGenerator signatureGenerator) {
+
+    public WebSocketApiTrade trade(String apiKey, SignatureGenerator signatureGenerator) {
         return new WebSocketApiTrade(new WebSocketApiRequestHandler(this.connection, apiKey, signatureGenerator));
     }
 
@@ -139,8 +145,9 @@ public class WebsocketApiClientImpl implements WebsocketApiClient {
         checkCategoryInstance(this.wsApiAccount, WebSocketApiAccount.class);
         return this.wsApiAccount;
     }
-    public WebSocketApiAccount account(String apiKey,SignatureGenerator signatureGenerator){
-      return new WebSocketApiAccount(new WebSocketApiRequestHandler(this.connection, apiKey, signatureGenerator));
+
+    public WebSocketApiAccount account(String apiKey, SignatureGenerator signatureGenerator) {
+        return new WebSocketApiAccount(new WebSocketApiRequestHandler(this.connection, apiKey, signatureGenerator));
     }
 
     @Override
