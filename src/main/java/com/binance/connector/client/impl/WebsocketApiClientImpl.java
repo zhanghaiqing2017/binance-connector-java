@@ -24,7 +24,7 @@ public class WebsocketApiClientImpl implements WebsocketApiClient {
     private final String apiKey;
     private final String baseUrl;
     private final WebSocketCallback noopCallback = msg -> { };
-    private WebSocketConnection connection; 
+    private WebSocketConnection connection;
     private WebSocketApiRequestHandler requestHandler;
     private WebSocketApiGeneral wsApiGeneral;
     private WebSocketApiMarket wsApiMarket;
@@ -32,7 +32,15 @@ public class WebsocketApiClientImpl implements WebsocketApiClient {
     private WebSocketApiAccount wsApiAccount;
     private WebSocketApiUserDataStream wsApiUserDataStream;
 
-    public WebsocketApiClientImpl() {
+  public SignatureGenerator getSignatureGenerator() {
+    return signatureGenerator;
+  }
+
+  public String getApiKey() {
+    return apiKey;
+  }
+
+  public WebsocketApiClientImpl() {
         this("", null);
     }
 
@@ -49,7 +57,7 @@ public class WebsocketApiClientImpl implements WebsocketApiClient {
         this.signatureGenerator = signatureGenerator;
         this.baseUrl = baseUrl;
     }
-    
+
     private void checkRequestHandler() {
         if (this.requestHandler == null) {
             throw new BinanceConnectorException("No Websocket API connection to submit request. Please connect first.");
@@ -77,13 +85,27 @@ public class WebsocketApiClientImpl implements WebsocketApiClient {
         connect(noopCallback, onMessageCallback, noopCallback, noopCallback);
     }
 
-    public void connect(WebSocketCallback onOpenCallback, WebSocketCallback onMessageCallback, WebSocketCallback onClosingCallback, WebSocketCallback onFailureCallback) {
+  public void connect1(WebSocketCallback onMessageCallback) {
+    connect1(noopCallback, onMessageCallback, noopCallback, noopCallback);
+  }
+
+  public void connect(WebSocketCallback onOpenCallback, WebSocketCallback onMessageCallback, WebSocketCallback onClosingCallback, WebSocketCallback onFailureCallback) {
         Request request = RequestBuilder.buildWebsocketRequest(baseUrl);
 
         this.connection = new WebSocketConnection(onOpenCallback, onMessageCallback, onClosingCallback, onFailureCallback, request, client);
         this.requestHandler = new WebSocketApiRequestHandler(this.connection, this.apiKey, this.signatureGenerator);
         this.connection.connect();
     }
+    public void setRequestHandler(){
+      this.requestHandler = new WebSocketApiRequestHandler(this.connection, this.apiKey, this.signatureGenerator);
+
+    }
+  public void connect1(WebSocketCallback onOpenCallback, WebSocketCallback onMessageCallback, WebSocketCallback onClosingCallback, WebSocketCallback onFailureCallback) {
+    Request request = RequestBuilder.buildWebsocketRequest(baseUrl);
+
+    this.connection = new WebSocketConnection(onOpenCallback, onMessageCallback, onClosingCallback, onFailureCallback, request, client);
+    this.connection.connect();
+  }
 
     @Override
     public void close() {
@@ -117,6 +139,9 @@ public class WebsocketApiClientImpl implements WebsocketApiClient {
         checkRequestHandler();
         checkCategoryInstance(this.wsApiAccount, WebSocketApiAccount.class);
         return this.wsApiAccount;
+    }
+    public WebSocketApiAccount account(String apiKey,SignatureGenerator signatureGenerator){
+      return new WebSocketApiAccount(new WebSocketApiRequestHandler(this.connection, apiKey, signatureGenerator));
     }
 
     @Override
