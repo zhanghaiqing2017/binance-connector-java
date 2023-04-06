@@ -19,7 +19,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 
 public class WebsocketApiClientImpl implements WebsocketApiClient {
-    private static final OkHttpClient client = WebSocketApiHttpClientSingleton.getHttpClient();
+    private OkHttpClient client ;
     private final SignatureGenerator signatureGenerators;
     private final String apiKeys;
     private final String baseUrl;
@@ -51,6 +51,7 @@ public class WebsocketApiClientImpl implements WebsocketApiClient {
 
     public WebsocketApiClientImpl(String apiKey, SignatureGenerator signatureGenerator) {
         this(apiKey, signatureGenerator, DefaultUrls.WS_API_URL);
+        this.client= WebSocketApiHttpClientSingleton.getHttpClient();
     }
 
     public WebsocketApiClientImpl(String apiKey, SignatureGenerator signatureGenerator, String baseUrl) {
