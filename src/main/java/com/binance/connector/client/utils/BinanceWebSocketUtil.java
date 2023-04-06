@@ -12,28 +12,20 @@ import java.util.logging.Logger;
 
 
 public class BinanceWebSocketUtil {
-  private    WebsocketApiClientImpl client ;
+  public static  WebsocketApiClientImpl client ;
 
   public  static Map<String,Class> requestMap=new HashMap<>();
 
   private static String pingId;
 
   static {
-
-  }
-
-  public BinanceWebSocketUtil(){
-    client=new WebsocketApiClientImpl();
-  }
-  public static void startWebsocker(){
     new Thread(new Runnable() {
       @Override
       public void run() {
-        BinanceWebSocketUtil  client=new BinanceWebSocketUtil();
-        client.conntent();
+        client=new WebsocketApiClientImpl();
+        conntent();
         while (true){
           try {
-
             Thread.sleep(1000*10);
           } catch (InterruptedException e) {
             throw new RuntimeException(e);
@@ -41,18 +33,21 @@ public class BinanceWebSocketUtil {
           if(pingId!=null){
 
             try {
+//              client.close();
+              client = new WebsocketApiClientImpl();
               Thread.sleep(1000*10);
+
 
             } catch (InterruptedException e) {
               throw new RuntimeException(e);
             }
 
-            client=new BinanceWebSocketUtil();
-            client.conntent();
+
+            conntent();
             pingId=null;
 
           }
-          WebSocketApiGeneral general = client.client.general(MockData.API_KEY, MockData.HMAC_SIGNATURE_GENERATOR);
+          WebSocketApiGeneral general = client.general(MockData.API_KEY, MockData.HMAC_SIGNATURE_GENERATOR);
 
           Object ping = general.ping(null);
           System.out.println(new Date().toString());
@@ -63,7 +58,10 @@ public class BinanceWebSocketUtil {
     }).start();
 
   }
-  private  void conntent(){
+
+  public BinanceWebSocketUtil(){
+  }
+  private static void conntent(){
     client.connect(((event) -> {
       System.out.println(new Date().toString());
       System.out.println("response:{}"+event);
@@ -77,7 +75,7 @@ public class BinanceWebSocketUtil {
 
   }
 
-  public String  getAccount(String apiKey,String secret_key){
+  public static String  getAccount(String apiKey,String secret_key){
 
     WebSocketApiAccount account = client.account(apiKey,  new HmacSignatureGenerator(secret_key));
 //        new
@@ -86,7 +84,7 @@ public class BinanceWebSocketUtil {
     System.out.println(o.toString());
     return o.toString();
   }
-  public String getOrder(String apiKey,String secret_key,long startOrderid,String symbol){
+  public static String getOrder(String apiKey,String secret_key,long startOrderid,String symbol){
     WebSocketApiAccount account = client.account(apiKey,  new HmacSignatureGenerator(secret_key));
     org.json.JSONObject jsonObject=new org.json.JSONObject();
     jsonObject.put("fromId",startOrderid);
@@ -104,7 +102,6 @@ public class BinanceWebSocketUtil {
 //    String trxusdt = util.getOrder("66dLHliynTUBTTPymeoZkUXQQMJWMT2mZ4hc4jeEg7hksgPjEC6NLGshrlrRfqZG",
 //      "9b32ni7aI2qTGK32g51hvLK1vkekGZAKrVET1vOZvHWJ3JwyDqQDOmJq0UStZdOl", 1, "TRXUSDT");
 //    System.out.println(trxusdt);
-    startWebsocker();
 
 
 
